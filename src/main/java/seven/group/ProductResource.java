@@ -40,6 +40,7 @@ public class ProductResource {
 	@PUT
 	@Path("/{productId}")
 	public Response modifyProduct(Product product, @PathParam("marketId") long marketId, @PathParam("productId") long productId) {
+		product.setId(productId);
 		Product newProduct = productService.modifyProduct(product, marketId, productId);
 		return Response.status(Status.OK).entity(newProduct).build();
 	}

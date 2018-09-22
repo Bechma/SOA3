@@ -1,5 +1,6 @@
 package seven.group;
 
+import managexml.AdministrateMarket;
 import managexml.ManageXML;
 import managexml.Root;
 
@@ -25,31 +26,41 @@ public class MarketService {
 	}
 	
 	public List<Market> getAllMarketsForLocation(String location){
-		ArrayList<Market> markets = new ArrayList<Market>();
-		//TODO
+		List<Market> markets = new ArrayList<>();
+		Root root = ManageXML.ReadXML();
+		if (root != null)
+			for (Market market : root.getMarkets())
+				if (market.getLocation().equals(location))
+					markets.add(market);
 		return markets;
 	}
 	
 	public List<Market> getAllMarketsPaginated(int start, int size){
-		ArrayList<Market> markets = new ArrayList<>();
-		//TODO
+		List<Market> markets = new ArrayList<>();
+		Root root = ManageXML.ReadXML();
+		if (root != null) {
+			List<Market> temp = root.getMarkets();
+			for (int i = start; i < size && i < temp.size(); i++) {
+				markets.add(temp.get(i));
+			}
+		}
 		return markets;
 	}
 	
 	public Market addMarket(Market market) {
 		// TODO: Exception handling
-		ManageXML.AddMarket(market);
+		AdministrateMarket.AddMarket(market);
 		return market;
 	}
 	
 	public Market modifyMarket(long id, Market market) {
 		// TODO: Exception handling
-		ManageXML.ModifyMarket(market);
+		AdministrateMarket.ModifyMarket(market);
 		return market;
 	}
 	
 	public void deleteMarket(long id) {
 		//TODO
-		ManageXML.DeleteMarket(id);
+		AdministrateMarket.DeleteMarket(id);
 	}
 }

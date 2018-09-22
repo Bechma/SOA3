@@ -1,6 +1,8 @@
 package managexml;
 
+import seven.group.Client;
 import seven.group.Market;
+import seven.group.Order;
 import seven.group.Product;
 
 import javax.xml.bind.JAXBContext;
@@ -11,23 +13,40 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ManageXML {
+public final class ManageXML {
 	private static final String xmlFilePath = "C:\\\\Users\\oiness\\markets.xml";
 	private static final Object lock = new Object();
 
-	public static void CreateXML(List<Market> markets) {
+	public static void CreateXML(List elements) {
 		synchronized (lock) {
 			try {
 				File file = new File(xmlFilePath);
-				if(!file.exists())
-					file.createNewFile();
+				Root root = null;
 
-				JAXBContext jaxbContext = JAXBContext.newInstance(Root.class, Market.class, Product.class);
+				if(!file.exists()){
+					// TODO: Handle exception
+					if(!file.createNewFile())
+						return ;
+				}
+				else
+					root = ReadXML();
+
+				if (root == null) {
+					root = new Root();
+				}
+
+				if (elements != null && elements.size() > 0) {
+					if (elements.get(0) instanceof Market)		root.setMarkets(elements);
+					else if (elements.get(0) instanceof Client) root.setClients(elements);
+					else return ;
+				} else return ;
+
+				JAXBContext jaxbContext = JAXBContext.newInstance(Root.class, Market.class, Product.class, Client.class, Order.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-				jaxbMarshaller.marshal(new Root(markets), file);
+				jaxbMarshaller.marshal(root, file);
 
 			} catch (JAXBException | IOException e) {
 				e.printStackTrace();
@@ -41,7 +60,7 @@ public class ManageXML {
 				File file = new File(xmlFilePath);
 				if (!file.exists())
 					return new Root();
-				JAXBContext jaxbContext = JAXBContext.newInstance(Root.class, Market.class, Product.class);
+				JAXBContext jaxbContext = JAXBContext.newInstance(Root.class, Market.class, Product.class, Client.class, Order.class);
 
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				return (Root) jaxbUnmarshaller.unmarshal(file);
@@ -50,70 +69,5 @@ public class ManageXML {
 			}
 		}
 		return null;
-	}
-
-	public static boolean AddProduct(Market market, Product product) {
-		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
-		if (root == null)
-			return false;
-		List<Market> markets = root.getMarkets();
-		for (int i = 0; i < markets.size(); i++) {
-			if (markets.get(i).getId() == market.getId()) {
-				long id = markets.get(i).getProduct().get(markets.size()-1).getId();
-				product.setId(id+1);
-				markets.get(i).getProduct().add(product);
-				ManageXML.CreateXML(markets);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean AddMarket(Market market) {
-		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
-		if (root == null)
-			return false;
-
-		List<Market> markets = root.getMarkets();
-		long id = markets.get(markets.size()-1).getId();
-		market.setId(id+1);
-
-		markets.add(market);
-		ManageXML.CreateXML(markets);
-		return true;
-	}
-
-	public static boolean ModifyMarket(Market market) {
-		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
-		if (root == null)
-			return false;
-		List<Market> markets = root.getMarkets();
-		for (int i = 0; i < markets.size(); i++) {
-			if (markets.get(i).getId() == market.getId()) {
-				markets.set(i, market);
-				ManageXML.CreateXML(markets);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean DeleteMarket(long id) {
-		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
-		if (root == null)
-			return false;
-		List<Market> markets = root.getMarkets();
-		for (int i = 0; i < markets.size(); i++) {
-			if (markets.get(i).getId() == id) {
-				markets.remove(i);
-				ManageXML.CreateXML(markets);
-				return true;
-			}
-		}
-		return false;
 	}
 }
