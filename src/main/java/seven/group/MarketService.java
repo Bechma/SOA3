@@ -7,15 +7,15 @@ import managexml.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MarketService {
+class MarketService {
 	
-	public List<Market> getAllMarkets(){
+	List<Market> getAllMarkets(){
 		Root root = ManageXML.ReadXML();
 		// TODO: Exception handling
 		return root != null ? root.getMarkets() : null;
 	}
 	
-	public Market getMarket(long id) {
+	Market getMarket(long id) {
 		Root root = ManageXML.ReadXML();
 		if (root != null)
 			for (Market market : root.getMarkets())
@@ -25,7 +25,7 @@ public class MarketService {
 		return new Market();
 	}
 	
-	public List<Market> getAllMarketsForLocation(String location){
+	List<Market> getAllMarketsForLocation(String location){
 		List<Market> markets = new ArrayList<>();
 		Root root = ManageXML.ReadXML();
 		if (root != null)
@@ -35,7 +35,7 @@ public class MarketService {
 		return markets;
 	}
 	
-	public List<Market> getAllMarketsPaginated(int start, int size){
+	List<Market> getAllMarketsPaginated(int start, int size){
 		List<Market> markets = new ArrayList<>();
 		Root root = ManageXML.ReadXML();
 		if (root != null) {
@@ -47,20 +47,20 @@ public class MarketService {
 		return markets;
 	}
 	
-	public Market addMarket(Market market) {
+	Market addMarket(Market market) {
 		// TODO: Exception handling
 		AdministrateMarket.AddMarket(market);
 		return market;
 	}
 	
-	public Market modifyMarket(long id, Market market) {
+	Market modifyMarket(Market market) {
 		// TODO: Exception handling
 		AdministrateMarket.ModifyMarket(market);
 		return market;
 	}
 	
-	public void deleteMarket(long id) {
-		//TODO
+	void deleteMarket(long id) {
+		// TODO: Exception handling
 		AdministrateMarket.DeleteMarket(id);
 	}
 }

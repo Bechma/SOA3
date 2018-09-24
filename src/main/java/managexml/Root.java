@@ -14,7 +14,7 @@ public class Root {
 	private List<Market> markets;
 	private List<Client> clients;
 
-	public Root() {markets = new ArrayList<>();}
+	public Root() {markets = new ArrayList<>(); clients = new ArrayList<>();}
 
 	public Root(List<Market> markets) {
 		this.markets = markets;

@@ -57,7 +57,7 @@ public class  MarketsResource{
     @Path("/{marketId}")
     public Response modifyMarket(@PathParam("marketId") long id, Market market) {
     	market.setId(id);
-		Market newMarket = marketService.modifyMarket(id, market);
+		Market newMarket = marketService.modifyMarket(market);
     	return Response.status(Status.CREATED).entity(newMarket).build();
     }
     

@@ -17,8 +17,9 @@ public final class AdministrateProduct {
 			if (markets.get(i).getId() == market) {
 				long id;
 				try {
-					id = markets.get(i).getProduct().get(markets.size() - 1).getId();
-				} catch (NullPointerException npe) {
+					ArrayList<Product> products = markets.get(i).getProduct();
+					id = products.get(products.size() - 1).getId();
+				} catch (NullPointerException | IndexOutOfBoundsException npe) {
 					id = 1;
 				}
 				product.setId(id+1);

@@ -1,35 +1,49 @@
 package seven.group;
 
+import managexml.AdministrateProduct;
+import managexml.ManageXML;
+import managexml.Root;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductService {
+class ProductService {
 	 
-	public List<Product> getAllProducts(long marketId){
-		ArrayList<Product> products = new ArrayList<Product>();
-		//TODO
-		return products;
+	List<Product> getAllProducts(long marketId){
+		Root root = ManageXML.ReadXML();
+		if (root == null)
+			return new ArrayList<>();
+		// TODO: Exception handling
+		for (Market market : root.getMarkets()) {
+			if (market.getId() == marketId)
+				return market.getProduct();
+		}
+		return new ArrayList<>();
 	}
 	
-	public Product getProduct(long marketId, long productId) {
-		Product product = new Product();
-		//TODO
-		return product;
+	Product getProduct(long marketId, long productId) {
+		Root root = ManageXML.ReadXML();
+		if (root == null)
+			return new Product();
+		// TODO: Exception handling
+		for (Market market : root.getMarkets()) {
+			if (market.getId() == marketId)
+				for (Product product : market.getProduct())
+					if (product.getId() == productId)
+						return product;
+		}
+		return new Product();
 	}
 	
-	public Product addProduct(Product product, long marketId) {
-		Product newProduct = new Product();
-		//TODO
-		return newProduct;
+	Product addProduct(long marketId, Product product) {
+		return AdministrateProduct.AddProduct(marketId, product) ? product : new Product();
 	}
 	
-	public Product modifyProduct(Product product, long marketId, long productId) {
-		Product newProduct = new Product();
-		//TODO
-		return newProduct;
+	Product modifyProduct(long marketId, Product product) {
+		return AdministrateProduct.ModifyProduct(marketId, product) ? product : new Product();
 	}
 	
-	public void deleteProduct(long marketId, long productId) {
-		//TODO
+	boolean deleteProduct(long marketId, long productId) {
+		return AdministrateProduct.DeleteProduct(marketId, productId);
 	}
 }
