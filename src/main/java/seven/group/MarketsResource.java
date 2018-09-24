@@ -26,7 +26,8 @@ public class  MarketsResource{
     @GET
     @Path("/{marketId}")
     public Response getMarket(@PathParam("marketId") long id) {
-        Market market = marketService.getMarket(id);
+		Market market;
+		market = marketService.getMarket(id);
         return Response.status(Status.OK).entity(market).build();
     }
     

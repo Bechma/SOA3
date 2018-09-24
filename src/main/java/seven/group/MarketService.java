@@ -1,5 +1,7 @@
 package seven.group;
 
+import exceptions.DataNotFound;
+import exceptions.InternalDBError;
 import managexml.AdministrateMarket;
 import managexml.ManageXML;
 import managexml.Root;
@@ -11,8 +13,9 @@ class MarketService {
 	
 	List<Market> getAllMarkets(){
 		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
-		return root != null ? root.getMarkets() : null;
+		if (root == null)
+			throw new InternalDBError("There is a problem with our database, please try again in a moment");
+		return root.getMarkets();
 	}
 	
 	Market getMarket(long id) {
@@ -21,8 +24,7 @@ class MarketService {
 			for (Market market : root.getMarkets())
 				if (market.getId() == id)
 					return market;
-		//TODO
-		return new Market();
+		throw new DataNotFound("Market not found");
 	}
 	
 	List<Market> getAllMarketsForLocation(String location){
@@ -54,13 +56,14 @@ class MarketService {
 	}
 	
 	Market modifyMarket(Market market) {
-		// TODO: Exception handling
-		AdministrateMarket.ModifyMarket(market);
-		return market;
+		if (AdministrateMarket.ModifyMarket(market))
+			return market;
+		throw new DataNotFound("Market not found");
 	}
 	
 	void deleteMarket(long id) {
-		// TODO: Exception handling
-		AdministrateMarket.DeleteMarket(id);
+		if (AdministrateMarket.DeleteMarket(id))
+			return ;
+		throw new DataNotFound("Market not found");
 	}
 }

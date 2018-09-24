@@ -1,5 +1,6 @@
 package managexml;
 
+import exceptions.InternalDBError;
 import seven.group.Market;
 import seven.group.Product;
 
@@ -9,9 +10,8 @@ import java.util.List;
 public final class AdministrateProduct {
 	public static boolean AddProduct(long market, Product product) {
 		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
 		if (root == null)
-			return false;
+			throw new InternalDBError("There is a problem with our database, please try again in a moment");
 		List<Market> markets = root.getMarkets();
 		for (int i = 0; i < markets.size(); i++) {
 			if (markets.get(i).getId() == market) {
@@ -33,9 +33,9 @@ public final class AdministrateProduct {
 
 	public static boolean ModifyProduct(long market, Product product) {
 		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
 		if (root == null)
-			return false;
+			throw new InternalDBError("There is a problem with our database, please try again in a moment");
+
 		List<Market> markets = root.getMarkets();
 		for (Market market1 : markets)
 			if (market1.getId() == market) {
@@ -53,9 +53,9 @@ public final class AdministrateProduct {
 
 	public static boolean DeleteProduct(long marketId, long productId) {
 		Root root = ManageXML.ReadXML();
-		// TODO: Exception handling
 		if (root == null)
-			return false;
+			throw new InternalDBError("There is a problem with our database, please try again in a moment");
+
 		List<Market> markets = root.getMarkets();
 		for (Market market : markets) {
 			if (market.getId() == marketId) {
