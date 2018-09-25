@@ -14,8 +14,15 @@ public final class AdministrateClient
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
 		
 		List<Client> clients = root.getClients();
-		long id = clients.get(clients.size()-1).getId();
-		client.setId(id+1);
+
+		long id;
+		try {
+			id = clients.get(clients.size() - 1).getId();
+			id = id + 1;
+		} catch (NullPointerException | IndexOutOfBoundsException npe){
+			id = 1;
+		}
+		client.setId(id);
 		clients.add(client);
 		ManageXML.CreateXML(clients);
 		return true;

@@ -38,7 +38,7 @@ public class  MarketsResource{
     	if(fBean.getLocation() != null)
     		markets =  marketService.getAllMarketsForLocation(fBean.getLocation());
     	else if(fBean.getStart() > 0)
-    		markets =  marketService.getAllMarketsPaginated(fBean.getStart(), fBean.getSize());
+    		markets =  marketService.getAllMarketsPaginated(fBean.getStart(), fBean.getEnd());
     	else 
     		markets = marketService.getAllMarkets();
     	

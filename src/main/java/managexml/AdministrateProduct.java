@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class AdministrateProduct {
-	private static void links(long market, Product product, UriInfo uriInfo) {
+	static void links(long market, Product product, UriInfo uriInfo) {
 		product.setSelfLink(uriInfo
 				.getBaseUriBuilder()
 				.path(ProductResource.class)

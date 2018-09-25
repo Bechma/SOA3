@@ -12,8 +12,14 @@ public final class AdministrateMarket {
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
 
 		List<Market> markets = root.getMarkets();
-		long id = markets.get(markets.size()-1).getId();
-		market.setId(id+1);
+		long id;
+		try{
+			id = markets.get(markets.size()-1).getId();
+			id = id + 1;
+		} catch (NullPointerException | IndexOutOfBoundsException npe)  {
+			id = 1;
+		}
+		market.setId(id);
 
 		markets.add(market);
 		ManageXML.CreateXML(markets);

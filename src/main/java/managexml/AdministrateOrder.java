@@ -40,11 +40,16 @@ public final class AdministrateOrder {
 				long id;
 				try {
 					id = clients.get(i).getOrder().get(clients.size() - 1).getId();
-				} catch (NullPointerException npe) {
+				} catch (NullPointerException | IndexOutOfBoundsException npe) {
 					id = 1;
 				}
 				order.setId(id+1);
 				links(client, order, uriInfo);
+
+				for (int j = 0; j < order.getProduct().size(); j++){
+					AdministrateProduct.links(order.getMarketId(), order.getProduct().get(j),uriInfo);
+				}
+
 				clients.get(i).addOrder(order);
 				ManageXML.CreateXML(clients);
 				return true;

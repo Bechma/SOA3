@@ -4,7 +4,7 @@ import javax.ws.rs.QueryParam;
 
 public class MarketFilterBean {
 	private @QueryParam("start") int start;
-	private @QueryParam("size") int size;
+	private @QueryParam("end") int end;
 	private @QueryParam("location") String location;
 	
 	public int getStart() {
@@ -13,11 +13,11 @@ public class MarketFilterBean {
 	public void setStart(int start) {
 		this.start = start;
 	}
-	public int getSize() {
-		return size;
+	public int getEnd() {
+		return end;
 	}
-	public void setSize(int size) {
-		this.size = size;
+	public void setEnd(int size) {
+		this.end = size;
 	}
 	public String getLocation() {
 		return location;

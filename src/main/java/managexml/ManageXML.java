@@ -59,12 +59,15 @@ public final class ManageXML {
 			try {
 				File file = new File(xmlFilePath);
 				if (!file.exists())
-					return new Root();
+					if(!file.createNewFile())
+						throw new InternalDBError("There is a problem with our database, please try again in a moment");
+					else
+						return new Root();
 				JAXBContext jaxbContext = JAXBContext.newInstance(Root.class, Market.class, Product.class, Client.class, Order.class);
 
 				Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				return (Root) jaxbUnmarshaller.unmarshal(file);
-			} catch (JAXBException e) {
+			} catch (JAXBException | IOException e) {
 				e.printStackTrace();
 			}
 		}

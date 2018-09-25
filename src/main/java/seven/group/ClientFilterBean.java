@@ -5,7 +5,7 @@ import javax.ws.rs.QueryParam;
 public class ClientFilterBean 
 {
 	private @QueryParam("start") int start;
-	private @QueryParam("size") int size;
+	private @QueryParam("end") int size;
 	private @QueryParam("name") String name;
 	private @QueryParam("email") String email;
 	

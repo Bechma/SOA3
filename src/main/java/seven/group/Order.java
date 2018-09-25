@@ -12,7 +12,7 @@ public class Order
 	private long marketId;
 	private String marketLink;
 	private String selfLink;
-	private ArrayList<Product> product;
+	private ArrayList<Product> product = new ArrayList<>();
 
 	public String getMarketLink() {
 		return marketLink;
