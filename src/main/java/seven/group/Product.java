@@ -5,9 +5,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Product {
 	private long id;
+	private String selfLink;
 	private String name;
 	private double price;
-	
+
+	public String getSelfLink() {
+		return selfLink;
+	}
+
+	public void setSelfLink(String selfLink) {
+		this.selfLink = selfLink;
+	}
+
 	public Product() {
 		id = -1;
 		name = "";

@@ -2,13 +2,35 @@ package managexml;
 
 import exceptions.InternalDBError;
 import seven.group.Client;
+import seven.group.MarketsResource;
 import seven.group.Order;
+import seven.group.OrderResource;
 
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class AdministrateOrder {
-	public static boolean AddOrder(long client, Order order) {
+	private static void links(long client, Order order, UriInfo uriInfo) {
+		order.setSelfLink(uriInfo
+				.getBaseUriBuilder()
+				.path(OrderResource.class)
+				.path(OrderResource.class, "getOrder")
+				.resolveTemplate("clientId", client)
+				.resolveTemplate("orderId", order.getId())
+				.build()
+				.toString());
+
+		order.setMarketLink(uriInfo
+				.getBaseUriBuilder()
+				.path(MarketsResource.class)
+				.path(MarketsResource.class, "getMarket")
+				.resolveTemplate("marketId", order.getMarketId())
+				.build()
+				.toString());
+	}
+
+	public static boolean AddOrder(long client, Order order, UriInfo uriInfo) {
 		Root root = ManageXML.ReadXML();
 		if (root == null)
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
@@ -22,6 +44,7 @@ public final class AdministrateOrder {
 					id = 1;
 				}
 				order.setId(id+1);
+				links(client, order, uriInfo);
 				clients.get(i).addOrder(order);
 				ManageXML.CreateXML(clients);
 				return true;
@@ -30,7 +53,7 @@ public final class AdministrateOrder {
 		return false;
 	}
 
-	public static boolean ModifyOrder(long client, Order order) {
+	public static boolean ModifyOrder(long client, Order order, UriInfo uriInfo) {
 		Root root = ManageXML.ReadXML();
 		if (root == null)
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
@@ -40,6 +63,7 @@ public final class AdministrateOrder {
 				ArrayList<Order> orders = client1.getOrder();
 				for (int i = 0; i < orders.size(); i++) {
 					if (orders.get(i).getId() == order.getId()) {
+						links(client, order, uriInfo);
 						orders.set(i, order);
 						ManageXML.CreateXML(clients);
 						return true;

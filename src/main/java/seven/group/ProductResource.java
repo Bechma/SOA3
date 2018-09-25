@@ -31,7 +31,7 @@ public class ProductResource {
 	
 	@POST
 	public Response addProduct(Product product, @PathParam("marketId") long marketId, @Context UriInfo uriInfo) {
-		Product newProduct = productService.addProduct(marketId, product);
+		Product newProduct = productService.addProduct(marketId, product, uriInfo);
 		String newId = String.valueOf(newProduct.getId());
 		URI uri = uriInfo.getBaseUriBuilder().path(newId).build();
 		return Response.created(uri).entity(newProduct).build();
@@ -39,16 +39,16 @@ public class ProductResource {
 	
 	@PUT
 	@Path("/{productId}")
-	public Response modifyProduct(Product product, @PathParam("marketId") long marketId, @PathParam("productId") long productId) {
+	public Response modifyProduct(Product product, @PathParam("marketId") long marketId, @PathParam("productId") long productId, @Context UriInfo uriInfo) {
 		product.setId(productId);
-		Product newProduct = productService.modifyProduct(marketId, product);
+		Product newProduct = productService.modifyProduct(marketId, product, uriInfo);
 		return Response.status(Status.OK).entity(newProduct).build();
 	}
 	
 	@DELETE
 	@Path("/{productId}")
 	public Response deleteProduct(@PathParam("marketId") long marketId, @PathParam("productId") long productId) {
-		boolean b = productService.deleteProduct(marketId, productId);
-		return Response.status(Status.OK).entity(b).build();
+		productService.deleteProduct(marketId, productId);
+		return Response.status(Status.OK).entity("Product removed").build();
 	}
 }

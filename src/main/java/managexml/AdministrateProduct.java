@@ -3,12 +3,25 @@ package managexml;
 import exceptions.InternalDBError;
 import seven.group.Market;
 import seven.group.Product;
+import seven.group.ProductResource;
 
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class AdministrateProduct {
-	public static boolean AddProduct(long market, Product product) {
+	private static void links(long market, Product product, UriInfo uriInfo) {
+		product.setSelfLink(uriInfo
+				.getBaseUriBuilder()
+				.path(ProductResource.class)
+				.path(ProductResource.class, "getProduct")
+				.resolveTemplate("marketId", market)
+				.resolveTemplate("productId", product.getId())
+				.build()
+				.toString());
+	}
+
+	public static boolean AddProduct(long market, Product product, UriInfo uriInfo) {
 		Root root = ManageXML.ReadXML();
 		if (root == null)
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
@@ -23,6 +36,7 @@ public final class AdministrateProduct {
 					id = 1;
 				}
 				product.setId(id+1);
+				links(market, product, uriInfo);
 				markets.get(i).addProduct(product);
 				ManageXML.CreateXML(markets);
 				return true;
@@ -31,7 +45,7 @@ public final class AdministrateProduct {
 		return false;
 	}
 
-	public static boolean ModifyProduct(long market, Product product) {
+	public static boolean ModifyProduct(long market, Product product, UriInfo uriInfo) {
 		Root root = ManageXML.ReadXML();
 		if (root == null)
 			throw new InternalDBError("There is a problem with our database, please try again in a moment");
@@ -42,6 +56,7 @@ public final class AdministrateProduct {
 				ArrayList<Product> products = market1.getProduct();
 				for (int i = 0; i < products.size(); i++) {
 					if (products.get(i).getId() == product.getId()) {
+						links(market, product, uriInfo);
 						products.set(i, product);
 						ManageXML.CreateXML(markets);
 						return true;

@@ -63,13 +63,13 @@ public class ClientsResource
     public Response modifyClient(@PathParam("clientId") long id, Client client) {
     	client.setId(id);
 		Client newClient = clientService.modifyClient(client);
-    	return Response.status(Status.CREATED).entity(newClient).build();
+    	return Response.status(Status.OK).entity(newClient).build();
     }
     
     @DELETE
     @Path("/{clientId}")
     public Response deleteClient(@PathParam("clientId") long id) {
     	clientService.deleteClient(id);
-    	return Response.status(Status.CREATED).build();
+    	return Response.status(Status.OK).build();
     }
 }

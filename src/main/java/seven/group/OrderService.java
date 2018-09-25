@@ -6,6 +6,7 @@ import managexml.AdministrateOrder;
 import managexml.ManageXML;
 import managexml.Root;
 
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 class OrderService {
@@ -40,12 +41,12 @@ class OrderService {
 		throw new InternalDBError("There is a problem with our database, please try again in a moment");
 	}
 	
-	Order addOrder(Order order, long clientId) {
-		return AdministrateOrder.AddOrder(clientId, order) ? order : new Order();
+	Order addOrder(Order order, long clientId, UriInfo uriInfo) {
+		return AdministrateOrder.AddOrder(clientId, order, uriInfo) ? order : new Order();
 	}
 	
-	Order modifyOrder(Order order, long clientId) {
-		if(AdministrateOrder.ModifyOrder(clientId, order))
+	Order modifyOrder(Order order, long clientId, UriInfo uriInfo) {
+		if(AdministrateOrder.ModifyOrder(clientId, order, uriInfo))
 			return order;
 		throw new DataNotFound("Order not found");
 	}

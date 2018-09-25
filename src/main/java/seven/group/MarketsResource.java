@@ -59,14 +59,14 @@ public class  MarketsResource{
     public Response modifyMarket(@PathParam("marketId") long id, Market market) {
     	market.setId(id);
 		Market newMarket = marketService.modifyMarket(market);
-    	return Response.status(Status.CREATED).entity(newMarket).build();
+    	return Response.status(Status.OK).entity(newMarket).build();
     }
     
     @DELETE
     @Path("/{marketId}")
     public Response deleteMarket(@PathParam("marketId") long id) {
     	marketService.deleteMarket(id);
-    	return Response.status(Status.CREATED).build();
+    	return Response.status(Status.OK).build();
     }
     
     

@@ -6,6 +6,7 @@ import managexml.AdministrateProduct;
 import managexml.ManageXML;
 import managexml.Root;
 
+import javax.ws.rs.core.UriInfo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,12 @@ class ProductService {
 		throw new DataNotFound("Product not found");
 	}
 	
-	Product addProduct(long marketId, Product product) {
-		return AdministrateProduct.AddProduct(marketId, product) ? product : new Product();
+	Product addProduct(long marketId, Product product, UriInfo uriInfo) {
+		return AdministrateProduct.AddProduct(marketId, product, uriInfo) ? product : new Product();
 	}
 	
-	Product modifyProduct(long marketId, Product product) {
-		if (AdministrateProduct.ModifyProduct(marketId, product))
+	Product modifyProduct(long marketId, Product product, UriInfo uriInfo) {
+		if (AdministrateProduct.ModifyProduct(marketId, product, uriInfo))
 			return product;
 		throw new DataNotFound("Product not found");
 	}

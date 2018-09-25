@@ -50,7 +50,6 @@ class MarketService {
 	}
 	
 	Market addMarket(Market market) {
-		// TODO: Exception handling
 		AdministrateMarket.AddMarket(market);
 		return market;
 	}

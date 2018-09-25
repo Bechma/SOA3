@@ -1,5 +1,6 @@
 package managexml;
 
+import exceptions.InternalDBError;
 import seven.group.Client;
 import seven.group.Market;
 import seven.group.Order;
@@ -24,9 +25,8 @@ public final class ManageXML {
 				Root root = null;
 
 				if(!file.exists()){
-					// TODO: Handle exception
 					if(!file.createNewFile())
-						return ;
+						throw new InternalDBError("There is a problem with our database, please try again in a moment");
 				}
 				else
 					root = ReadXML();

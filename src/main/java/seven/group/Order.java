@@ -10,8 +10,26 @@ public class Order
 {
 	private long id;
 	private long marketId;
+	private String marketLink;
+	private String selfLink;
 	private ArrayList<Product> product;
-	
+
+	public String getMarketLink() {
+		return marketLink;
+	}
+
+	public void setMarketLink(String marketLink) {
+		this.marketLink = marketLink;
+	}
+
+	public String getSelfLink() {
+		return selfLink;
+	}
+
+	public void setSelfLink(String selfLink) {
+		this.selfLink = selfLink;
+	}
+
 	public Order()
 	{
 		id = -1;

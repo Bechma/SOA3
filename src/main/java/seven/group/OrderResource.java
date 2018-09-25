@@ -31,7 +31,7 @@ public class OrderResource
 	
 	@POST
 	public Response addOrder(Order order, @PathParam("clientId")long clientId, @Context UriInfo uriInfo) {
-		Order newOrder = orderService.addOrder(order, clientId);
+		Order newOrder = orderService.addOrder(order, clientId, uriInfo);
 		String newId = String.valueOf(newOrder.getId());
 		URI uri = uriInfo.getBaseUriBuilder().path(newId).build();
 		return Response.created(uri).entity(newOrder).build();
@@ -39,9 +39,9 @@ public class OrderResource
 	
 	@PUT
 	@Path("/{orderId}")
-	public Response modifyOrder(Order order, @PathParam("clientId")long clientId, @PathParam("orderId")long orderId) {
+	public Response modifyOrder(Order order, @PathParam("clientId")long clientId, @PathParam("orderId")long orderId, @Context UriInfo uriInfo) {
 		order.setId(orderId);
-		Order newOrder = orderService.modifyOrder(order, clientId);
+		Order newOrder = orderService.modifyOrder(order, clientId, uriInfo);
 		return Response.status(Status.OK).entity(newOrder).build();
 	}
 	
