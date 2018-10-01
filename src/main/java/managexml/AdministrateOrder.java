@@ -40,6 +40,7 @@ public final class AdministrateOrder {
 				long id;
 				try {
 					id = clients.get(i).getOrder().get(clients.size() - 1).getId();
+					id = id + 1;
 				} catch (NullPointerException | IndexOutOfBoundsException npe) {
 					id = 1;
 				}
