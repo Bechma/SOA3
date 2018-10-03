@@ -23,10 +23,13 @@ import java.util.List;
 public class LoginResource {
 	
 	private static RsaJsonWebKey webKey;
-	
-	public LoginResource(){
-		//Generate webKey
 
+	public LoginResource() {
+		try {
+			webKey = RsaJwkGenerator.generateJwk(2048);
+		} catch (JoseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	static Key getKey() {
@@ -58,13 +61,18 @@ public class LoginResource {
 		if (email == null || pass == null)
 			return Response.status(Status.UNAUTHORIZED).build();
 
-		if (!email.equals("raulsf66@gmail.com") || !pass.equals("112233"))
-			return Response.status(Status.UNAUTHORIZED).build();
+		if (!email.equals("admin@admin.com") || !pass.equals("admin"))
+			if (!email.equals("raul@gmail.com") || !pass.equals("user"))
+				return Response.status(Status.UNAUTHORIZED).build();
 		
 		//Create payload
 		JwtClaims claims = new JwtClaims();
 		claims.setSubject(email);
-		List<String> groups = Arrays.asList("user", "admin");
+		List<String> groups;
+		if (pass.equals("admin"))
+			groups = Arrays.asList("user", "admin");
+		else
+			groups = Arrays.asList("user", "");
 		claims.setStringListClaim("groups", groups);
 		
 		//Create web signature
@@ -75,7 +83,7 @@ public class LoginResource {
 		jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.RSA_USING_SHA256);
 		
 		//Generate Token
-		String jwt = null;
+		String jwt = "";
 		try {
 			jwt = jws.getCompactSerialization();
 		} catch (JoseException e) {
